@@ -15,6 +15,10 @@ En esta sección nos vamos a ocupar de hacer que el modelo sea más rápido para
 ### 1) Diferencias entre `QDA`y `TensorizedQDA`
 
 1. ¿Sobre qué paraleliza `TensorizedQDA`? ¿Sobre las $k$ clases, las $n$ observaciones a predecir, o ambas?
+
+Sobre las k clases.
+Vemos que TensorizedQDA reescribe la función `_predict_one`, que en la clase base itera sobre las k clases y calcula la probabilidad de cada clase en cada iteracion. La nueva version utiliza tensores (`tensor_inv_cov`, `tensor_means`) para calcular la priroridad de las k clases en una sola operacion. Por ende paraleliza sobre las k clases.
+
 2. Analizar los shapes de `tensor_inv_covs` y `tensor_means` y explicar paso a paso cómo es que `TensorizedQDA` llega a predecir lo mismo que `QDA`.
 
 ### 2) Optimización
