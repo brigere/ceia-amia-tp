@@ -21,6 +21,14 @@ Vemos que TensorizedQDA reescribe la función `_predict_one`, que en la clase ba
 
 2. Analizar los shapes de `tensor_inv_covs` y `tensor_means` y explicar paso a paso cómo es que `TensorizedQDA` llega a predecir lo mismo que `QDA`.
 
+Primero analizamos `inv_covs`: es una lista de Python con k items (uno por clase) en el que cada item es la matriz de covarianza para cada clase (una matriz pxp). `tensor_inv_cov` es el tensor que se crea con numpy.stack al pasarle dicha lista, o sea tiene el shape **k,p,p**.
+
+Ahora analizamos `means`: es una lista de Python de k elementos que contine un vector columna de p elementos, cada elemto es la media de esa featura para la clase. `tensor_means` es un tensor de numpy para el arreglo mencionado, el shape es **k,p** o **k,p,1** (Notese que el 1 es porque estamos trabajando con vectores columna).
+
+Primero, como funciona la funcion predict in la clase `QDA`: itera sobre las `n` observaciones, arma una lista con k elementos, cada item es `log_a_priori + prediccion`. La prediccion toma una observacion `x` e itera sobre cada clase `k` prediciendo los valores. En `TensorizedQDA`, se elimina ese ultimo loop mencionado y se calculan las probabilidades para las k clases juntas.
+
+
+
 ### 2) Optimización
 
 Debido a la forma cuadrática de QDA, no se puede predecir para $n$ observaciones en una sola pasada (utilizar $X \in \mathbb{R}^{p \times n}$ en vez de $x \in \mathbb{R}^p$) sin pasar por una matriz de $n \times n$ en donde se computan todas las interacciones entre observaciones. Se puede acceder al resultado recuperando sólo la diagonal de dicha matriz, pero resulta ineficiente en tiempo y (especialmente) en memoria. Aún así, es *posible* que el modelo funcione más rápido.
