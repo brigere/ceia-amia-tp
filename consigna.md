@@ -35,6 +35,15 @@ Debido a la forma cuadrática de QDA, no se puede predecir para $n$ observacione
 
 3. Implementar el modelo `FasterQDA` (se recomienda heredarlo de `TensorizedQDA`) de manera de eliminar el ciclo for en el método predict.
 4. Mostrar dónde aparece la mencionada matriz de $n \times n$, donde $n$ es la cantidad de observaciones a predecir.
+
+La matriz aparece en `FasterQDA.predict`, en la línea:
+
+```python
+inner_prod = unbiased_X.transpose(0, 2, 1) @ self.tensor_inv_cov @ unbiased_X
+```
+
+El resultado tiene shape $(k,n,n)$: el primer eje es el índice de clase (se repite el cálculo para cada una) y los dos últimos forman la matriz de $n \times n$, o sea hay una matriz de $n \times n$ por cada clase. Sale de multiplicar, para cada clase, $(n,p)\cdot(p,p)\cdot(p,n) = (n,n)$.
+
 5. Demostrar que
 $$diag(A \cdot B) = \sum_{cols} A \odot B^T = np.sum(A \odot B^T, axis=1)$$ es decir, que se puede "esquivar" la matriz de $n \times n$ usando matrices de $n \times p$. También se puede usar, de forma equivalente,
 $$np.sum(A^T \odot B, axis=0).T$$
