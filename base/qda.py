@@ -47,7 +47,7 @@ class TensorizedQDA(QDA):
         return np.argmax(self.log_a_priori + self._predict_log_conditionals(x))
 
 
-# Implementar el modelo `FasterQDA` (se recomienda heredarlo de `TensorizedQDA`) 
+# 3. Implementar el modelo `FasterQDA` (se recomienda heredarlo de `TensorizedQDA`) 
 # de manera de eliminar el ciclo for en el método predict.
 class FasterQDA(TensorizedQDA):
 
@@ -62,4 +62,15 @@ class FasterQDA(TensorizedQDA):
         return np.argmax(log_posteriori, axis=0).reshape(1, -1)
 
 
-  
+# 6. Utilizar la propiedad antes demostrada para reimplementar 
+# la predicción del modelo `FasterQDA` de forma eficiente en un nuevo modelo `EfficientQDA`.
+class EfficientQDA(TensorizedQDA):
+
+    def predict(self, X_obs):
+        unbiased_X = X_obs - self.tensor_means
+        cuadratic_diagonal = np.sum(unbiased_X * (self.tensor_inv_cov @ unbiased_X), axis=1)
+
+        log_conditionals = 0.5 * np.log(LA.det(self.tensor_inv_cov))[:, None] - 0.5 * cuadratic_diagonal
+        log_posteriori = self.log_a_priori[:, None] + log_conditionals
+
+        return np.argmax(log_posteriori, axis=0).reshape(1, -1)
