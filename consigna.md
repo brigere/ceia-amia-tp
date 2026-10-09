@@ -49,7 +49,11 @@ $$diag(A \cdot B) = \sum_{cols} A \odot B^T = np.sum(A \odot B^T, axis=1)$$ es d
 $$np.sum(A^T \odot B, axis=0).T$$
 queda a preferencia del alumno cuál usar.
 6. Utilizar la propiedad antes demostrada para reimplementar la predicción del modelo `FasterQDA` de forma eficiente en un nuevo modelo `EfficientQDA`.
+      
+      Implementado en `/base/qda.py`
 7. Comparar la performance de las 4 variantes de QDA implementadas hasta ahora (no Cholesky) ¿Qué se observa? A modo de opinión ¿Se condice con lo esperado?
+  
+      Respuesta en Notebook.
 
 ## Cholesky
 
