@@ -48,6 +48,10 @@ El resultado tiene shape $(k,n,n)$: el primer eje es el índice de clase (se rep
 $$diag(A \cdot B) = \sum_{cols} A \odot B^T = np.sum(A \odot B^T, axis=1)$$ es decir, que se puede "esquivar" la matriz de $n \times n$ usando matrices de $n \times p$. También se puede usar, de forma equivalente,
 $$np.sum(A^T \odot B, axis=0).T$$
 queda a preferencia del alumno cuál usar.
+
+      La respuesta se encuentra en la notebook.
+
+      
 6. Utilizar la propiedad antes demostrada para reimplementar la predicción del modelo `FasterQDA` de forma eficiente en un nuevo modelo `EfficientQDA`.
       
       Implementado en `/base/qda.py`
