@@ -34,6 +34,9 @@ Primero, como funciona la funcion predict in la clase `QDA`: itera sobre las `n`
 Debido a la forma cuadrática de QDA, no se puede predecir para $n$ observaciones en una sola pasada (utilizar $X \in \mathbb{R}^{p \times n}$ en vez de $x \in \mathbb{R}^p$) sin pasar por una matriz de $n \times n$ en donde se computan todas las interacciones entre observaciones. Se puede acceder al resultado recuperando sólo la diagonal de dicha matriz, pero resulta ineficiente en tiempo y (especialmente) en memoria. Aún así, es *posible* que el modelo funcione más rápido.
 
 3. Implementar el modelo `FasterQDA` (se recomienda heredarlo de `TensorizedQDA`) de manera de eliminar el ciclo for en el método predict.
+
+Se implementa en `./base/qda.py`
+
 4. Mostrar dónde aparece la mencionada matriz de $n \times n$, donde $n$ es la cantidad de observaciones a predecir.
 
 La matriz aparece en `FasterQDA.predict`, en la línea:
@@ -49,7 +52,7 @@ $$diag(A \cdot B) = \sum_{cols} A \odot B^T = np.sum(A \odot B^T, axis=1)$$ es d
 $$np.sum(A^T \odot B, axis=0).T$$
 queda a preferencia del alumno cuál usar.
 
-      La respuesta se encuentra en la notebook.
+      La respuesta se encuentra en la notebook `tp.ipynb`.
 
       
 6. Utilizar la propiedad antes demostrada para reimplementar la predicción del modelo `FasterQDA` de forma eficiente en un nuevo modelo `EfficientQDA`.
