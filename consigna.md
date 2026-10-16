@@ -73,8 +73,17 @@ La descomposición/factorización de [Cholesky](https://en.wikipedia.org/wiki/Ch
 ### 3) Diferencias entre implementaciones de `QDA_Chol`
 
 8. Si una matriz $A$ tiene fact. de Cholesky $A=LL^T$, expresar $A^{-1}$ en términos de $L$. ¿Cómo podría esto ser útil en la forma cuadrática de QDA?
+
+      Respuesta en `./respuestas.ipynb`
+
 9. Explicar las diferencias entre `QDA_Chol1`y `QDA` y cómo `QDA_Chol1` llega, paso a paso, hasta las predicciones.
+
+      Respuesta en `./respuestas.ipynb`
+      
 10. ¿Cuáles son las diferencias entre `QDA_Chol1`, `QDA_Chol2` y `QDA_Chol3`?
+
+      Respuesta en `./respuestas.ipynb`
+      
 11. Comparar la performance de las 7 variantes de QDA implementadas hasta ahora ¿Qué se observa?¿Hay alguna de las implementaciones de `QDA_Chol` que sea claramente mejor que las demás?¿Alguna que sea peor?
 
 ### 4) Optimización
