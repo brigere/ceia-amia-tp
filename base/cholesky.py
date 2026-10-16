@@ -91,4 +91,18 @@ class TensorizedChol(QDA_Chol3):
 
     def _predict_one(self, x):
         return np.argmax(self.log_a_priori + self._predict_log_conditionals(x))
-    
+
+
+class EfficientChol(TensorizedChol):
+    def _predict_log_conditionals_batch(self, X):
+        unbiased_X = X - self.tensor_means
+        Y = self.tensor_L_inv @ unbiased_X
+        log_det_term = self.log_dets[:, None]
+        return log_det_term - 0.5 * (Y**2).sum(axis=1)  # (k, n)
+
+    def predict(self, X):
+        log_priori = self.log_a_priori[:, None]
+        log_conditional = self._predict_log_conditionals_batch(X)
+        log_posteriori = log_priori + log_conditional
+
+        return np.argmax(log_posteriori, axis=0).reshape(1, -1)
