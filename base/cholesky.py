@@ -61,3 +61,23 @@ class QDA_Chol3(BaseBayesianClassifier):
     y = L_inv @ unbiased_x
 
     return np.log(L_inv.diagonal().prod()) -0.5 * (y**2).sum()
+
+
+# se decide heredar de QDA_Chol 3 porque es el que esta mas optimizado para
+# el calculo de la prediccion
+# la implementacino sigue una mecanica similar a TensorizedQDA
+class TensorizedChol(QDA_Chol3):
+    def _fit_params(self, X, y):
+      super()._fit_params(X, y)
+      self.tensor_L_inv = np.stack(self.L_invs)
+      self.tensor_means = np.stack(self.means)
+      self.log_dets = np.log(np.diagonal(self.tensor_L_inv, axis1=1, axis2=2)).sum(axis=1)
+
+    def _predict_log_conditionals(self, x):
+      unbiased_x = x - self.tensor_means
+      y = self.tensor_L_inv @ unbiased_x
+      return self.log_dets - 0.5 * (y**2).sum(axis=(1, 2))
+
+    def _predict_one(self, x):
+      return np.argmax(self.log_a_priori + self._predict_log_conditionals(x))
+
