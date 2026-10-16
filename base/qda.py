@@ -51,14 +51,18 @@ class TensorizedQDA(QDA):
 # de manera de eliminar el ciclo for en el método predict.
 class FasterQDA(TensorizedQDA):
 
-    def predict(self, X_obs):
-        unbiased_X = X_obs - self.tensor_means
-        cuadratic = unbiased_X.transpose(0, 2, 1) @ self.tensor_inv_cov @ unbiased_X
-        cuadratic_diagonal = np.diagonal(cuadratic, axis1=1, axis2=2)
+    def _predict_log_conditionals_batch(self, X):
+        unbiased_X = X - self.tensor_means  # (p,n) - (k,p,1) -> (k,p,n), por broadcasting implicito
 
-        log_conditionals = 0.5 * np.log(LA.det(self.tensor_inv_cov))[:, None] - 0.5 * cuadratic_diagonal
-        log_posteriori = self.log_a_priori[:, None] + log_conditionals
+        # (k,n,p) @ (k,p,p) @ (k,p,n) -> (k,n,n): aca aparece la matriz de n x n por clase
+        inner_prod = unbiased_X.transpose(0,2,1) @ self.tensor_inv_cov @ unbiased_X
+        maha = np.diagonal(inner_prod, axis1=1, axis2=2)  # (k,n): solo nos sirve la diagonal
 
+        log_dets = 0.5 * np.log(LA.det(self.tensor_inv_cov))  # (k,)
+        return log_dets[:, np.newaxis] - 0.5 * maha  # (k,n)
+    
+    def predict(self, X):
+        log_posteriori = self.log_a_priori[:, np.newaxis] + self._predict_log_conditionals_batch(X)  # (k,n)
         return np.argmax(log_posteriori, axis=0).reshape(1, -1)
 
 
