@@ -86,6 +86,9 @@ La descomposición/factorización de [Cholesky](https://en.wikipedia.org/wiki/Ch
       
 11. Comparar la performance de las 7 variantes de QDA implementadas hasta ahora ¿Qué se observa?¿Hay alguna de las implementaciones de `QDA_Chol` que sea claramente mejor que las demás?¿Alguna que sea peor?
 
+      Respuesta en `tp.ipynb`.
+
+
 ### 4) Optimización
 
 12. Implementar el modelo `TensorizedChol` paralelizando sobre clases/observaciones según corresponda. Se recomienda heredarlo de alguna de las implementaciones de `QDA_Chol`, aunque la elección de cuál de ellas queda a cargo del alumno según lo observado en los benchmarks de puntos anteriores.
