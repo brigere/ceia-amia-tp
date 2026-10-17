@@ -98,7 +98,7 @@ class EfficientChol(TensorizedChol):
         unbiased_X = X - self.tensor_means
         Y = self.tensor_L_inv @ unbiased_X
         log_det_term = self.log_dets[:, None]
-        return log_det_term - 0.5 * (Y**2).sum(axis=1)  # (k, n)
+        return log_det_term - 0.5 * (Y**2).sum(axis=1) 
 
     def predict(self, X):
         log_priori = self.log_a_priori[:, None]
